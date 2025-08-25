@@ -23,7 +23,7 @@ class _HomeViewState extends State<HomeView> {
           children: [
             Homenav(),
             Image.asset("assets/images/banner@2x.jpg"),
-            Homelist()
+            HomeList()
           ],
         ),
       ),

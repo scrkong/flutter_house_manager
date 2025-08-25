@@ -40,14 +40,17 @@ class _TabsPageState extends State<TabsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const SafeArea(
+      body: SafeArea(
           child: IndexedStack(
+        index: _currentIndex,
         children: const [HomeView(), MineView()],
       )),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
-          _currentIndex = index;
+          setState(() {
+            _currentIndex = index;
+          });
         },
         items: getTabsBar(),
       ),
