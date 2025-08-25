@@ -137,7 +137,8 @@ class _VisitorViewState extends State<VisitorView> {
                         ],
                       ),
                       trailing: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: visitor['statusColor'],
                           borderRadius: BorderRadius.circular(12),
