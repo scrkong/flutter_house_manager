@@ -1,34 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_house_manager/pages/Home/components/Navitem.dart';
+
+import '../../../components/NotifyItem.dart';
 
 class HomeList extends StatefulWidget {
-  const HomeList({Key? key}) : super(key: key);
-
+  const HomeList({Key? key, required this.list}) : super(key: key);
+  final List list;
   @override
   _HomeListState createState() => _HomeListState();
 }
 
 class _HomeListState extends State<HomeList> {
-  List _list = [
-    {
-      "title": '祝愿各位小趴菜能有一份理想的编程工作',
-      "content":
-          '要到了收获的季节，任何事情都没有百分之百的成功概率， 不能让任何人定义你的未来，但是努力的人一定会有收获，可怜之人必有可恨之处',
-      "createAt": "2024-08-22 15:00:00"
-    },
-    {
-      "title": '祝愿各位小趴菜能有一份理想的编程工作',
-      "content":
-          '要到了收获的季节，任何事情都没有百分之百的成功概率， 不能让任何人定义你的未来，但是努力的人一定会有收获，可怜之人必有可恨之处',
-      "createAt": "2024-08-22 15:00:00"
-    },
-    {
-      "title": '祝愿各位小趴菜能有一份理想的编程工作',
-      "content":
-          '要到了收获的季节，任何事情都没有百分之百的成功概率， 不能让任何人定义你的未来，但是努力的人一定会有收获，可怜之人必有可恨之处',
-      "createAt": "2024-08-22 15:00:00"
-    }
-  ];
+  // List _list = [
+  //   {
+  //     "title": '祝愿各位小趴菜能有一份理想的编程工作',
+  //     "content":
+  //         '要到了收获的季节，任何事情都没有百分之百的成功概率， 不能让任何人定义你的未来，但是努力的人一定会有收获，可怜之人必有可恨之处',
+  //     "createAt": "2024-08-22 15:00:00"
+  //   },
+  //   {
+  //     "title": '祝愿各位小趴菜能有一份理想的编程工作',
+  //     "content":
+  //         '要到了收获的季节，任何事情都没有百分之百的成功概率， 不能让任何人定义你的未来，但是努力的人一定会有收获，可怜之人必有可恨之处',
+  //     "createAt": "2024-08-22 15:00:00"
+  //   },
+  //   {
+  //     "title": '祝愿各位小趴菜能有一份理想的编程工作',
+  //     "content":
+  //         '要到了收获的季节，任何事情都没有百分之百的成功概率， 不能让任何人定义你的未来，但是努力的人一定会有收获，可怜之人必有可恨之处',
+  //     "createAt": "2024-08-22 15:00:00"
+  //   }
+  // ];
 
   // 头部组件
   Widget getTitleWidget() {
@@ -68,8 +69,14 @@ class _HomeListState extends State<HomeList> {
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      children: _list.map((item) {
-        return NotifyItem(item: item);
+      children: widget.list.map((item) {
+        return GestureDetector(
+          child: NotifyItem(item: item),
+          onTap: () {
+            Navigator.pushNamed(context, "/noticeDetail",
+                arguments: {"id": item["id"]});
+          },
+        );
       }).toList(),
     );
   }

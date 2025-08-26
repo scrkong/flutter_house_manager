@@ -1,9 +1,20 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_house_manager/constans/index.dart';
 
-class Diorequest {
-  final _dio = Dio();
-  Diorequest() {
+import '../../constans/index.dart';
+
+class DioRequest {
+  final _dio = Dio(); // 它相当于const instance = axios.create()
+
+// 构造函数 在new这个类的时候执行
+  DioRequest() {
+    // _dio.options.baseUrl = GlobalVariable.BASE_URL;
+    // // 连接超时时间
+    // _dio.options.connectTimeout =
+    //     const Duration(seconds: GlobalVariable.NEW_WORK_TIME_OUT);
+    // // 接收超时时间
+    // _dio.options.receiveTimeout =
+    //     const Duration(seconds: GlobalVariable.NEW_WORK_TIME_OUT);
+    // 这叫链式调用
     _dio
       ..options.baseUrl = GlobalVariable.BASE_URL
       ..options.connectTimeout =
@@ -13,52 +24,67 @@ class Diorequest {
       ..options.sendTimeout =
           const Duration(seconds: GlobalVariable.NEW_WORK_TIME_OUT);
 
-    _dio.interceptors.add(InterceptorsWrapper(
-        //请求拦截器 注入token
-        onRequest: (context, handler) {
+    _dio.interceptors.add(InterceptorsWrapper(onRequest: (context, handler) {
+      // 请求拦截器
+      // 注入token
+
       handler.next(context);
-    },
-        //响应拦截器  判断http状态码的异常
-        onResponse: (context, handler) {
+    }, onResponse: (context, handler) {
+      // 2xx才是成功
+      //http状态码
       if (context.statusCode! >= 200 && context.statusCode! < 300) {
-        handler.next(context);
+        // 响应拦截器
+        handler.next(context); // 成功
       } else {
-        handler.reject(DioException(requestOptions: context.requestOptions));
+        // 说明 Promise pending fullfiled rejected
+        handler
+            .reject(DioException(requestOptions: context.requestOptions)); // 失败
       }
-      handler.next(context);
     },
-        //错误拦截器  处理401的错误，401错误一般要进行刷新token
+        // 错误拦截器
         onError: (context, handler) {
       handler.reject(context);
     }));
   }
-  get(String url, {Map<String, dynamic>? params}) {
-    return _dio.get(url, queryParameters: params);
-  }
 
-  put(String url, {Map<String, dynamic>? data}) {
-    return _dio.put(url, data: data);
+  // 工具最终都要通过 dio
+  get(String url, {Map<String, dynamic>? params}) {
+    return _handleResponse(_dio.get(url, queryParameters: params));
   }
 
   post(String url, {Map<String, dynamic>? data}) {
-    return _dio.post(url, data: data);
+    return _handleResponse(_dio.post(url, data: data));
+  }
+
+  put(String url, {Map<String, dynamic>? data}) {
+    return _handleResponse(_dio.put(url, data: data));
   }
 
   delete(String url,
       {Map<String, dynamic>? data, Map<String, dynamic>? params}) {
-    return _dio.delete(url, data: data, queryParameters: params);
+    return _handleResponse(
+        _dio.delete(url, data: data, queryParameters: params));
   }
 
   upload(String url) {}
-}
 
-_handleResponse(Future<Response<dynamic>> task) async {
-  final res = await task;
-  if (res.data["code"] == 200) {
-    return res.data["data"];
-  } else {
-    throw DioException(requestOptions: res.requestOptions);
+  _handleResponse(Future<Response<dynamic>> task) async {
+    final res = await task;
+    // 业务状态码
+    if (res.data["code"] == GlobalVariable.SUCCESS_CODE) {
+      return res.data["data"]; // fullfiled
+    }
+    // 提示错误消息
+    // return Promise.reject()
+    throw DioException(requestOptions: res.requestOptions); // 抛出异常 rejected状态
   }
 }
 
-final diorequest = Diorequest();
+final dioRequest = DioRequest();
+
+
+// rcp 中delete要传递请求体参数
+
+// rcp.createSession() instance.delete(url, )
+// new rcp.Request("url", {}, null, {})
+// instace.fetch(request)
