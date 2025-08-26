@@ -31,27 +31,32 @@ class _MineViewState extends State<MineView> {
                 child: Row(
                   children: [
                     // 用户头像
-                    Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                      child: ClipOval(
-                        child: Image.asset(
-                          'assets/images/avatar_1.jpg',
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: Colors.grey[300],
-                              child: Icon(
-                                Icons.person,
-                                size: 30,
-                                color: Colors.grey[600],
-                              ),
-                            );
-                          },
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/profile');
+                      },
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/images/avatar_1.jpg',
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: Colors.grey[300],
+                                child: Icon(
+                                  Icons.person,
+                                  size: 30,
+                                  color: Colors.grey[600],
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -75,8 +80,10 @@ class _MineViewState extends State<MineView> {
                             style: TextStyle(
                               color: Colors.white70,
                               fontSize: 14,
+                    
                             ),
                           ),
+                          
                         ],
                       ),
                     ),
